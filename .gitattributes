@@ -1,0 +1,5 @@
+# Raw source assets live in Git LFS (one 4K film is over GitHub's 100 MB limit).
+# Web-ready assets under site/public stay in normal git so a plain clone runs.
+/*.mp4 filter=lfs diff=lfs merge=lfs -text
+/*.zip filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text

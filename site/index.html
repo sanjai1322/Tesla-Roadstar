@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roadster</title>
+  <meta name="description" content="Roadster. A scroll-driven study of the quickest car in the world, built from real-time 3D, film and studio photography." />
+  <meta name="theme-color" content="#050506" />
+  <link rel="icon" href="/favicon.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/models/roadster_animated.glb" as="fetch" crossorigin />
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__logo">
+      <img src="/img/logo.png" alt="" class="loader__logo-base" />
+      <div class="loader__logo-fill"><img src="/img/logo.png" alt="" /></div>
+    </div>
+    <div class="loader__meta">
+      <span class="mono">Loading model</span>
+      <span class="mono" id="loaderPct">000</span>
+    </div>
+  </div>
+
+  <canvas id="stage" class="stage" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo" aria-label="Roadster, back to top"><img src="/img/logo.png" alt="Roadster" /></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#film">Film</a>
+      <a href="#aero">Aero</a>
+      <a href="#details">Detailing</a>
+      <a href="#inspect">Inspect</a>
+      <a href="#gravity">Thrust</a>
+    </nav>
+    <div class="nav__right">
+      <a href="#reserve" class="btn btn--ghost btn--sm">Reserve</a>
+      <button class="nav__menu" id="menuBtn" aria-expanded="false" aria-controls="menu"><span>Menu</span><i></i></button>
+    </div>
+  </header>
+
+  <!-- Menu overlay (uses mega menu assets) -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <div class="menu__inner">
+      <div class="menu__col">
+        <p class="eyebrow">Vehicles</p>
+        <a class="menu__card" href="#top"><img src="/img/mega/Mega-Menu-Roadster.jpg" alt="" /><span>Roadster</span></a>
+        <a class="menu__card" href="https://www.tesla.com/modely" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Vehicles-Model-Y-2-v2.png" alt="" /><span>Model Y</span></a>
+      </div>
+      <div class="menu__col">
+        <p class="eyebrow">Energy</p>
+        <a class="menu__card" href="https://www.tesla.com/powerwall" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Energy-Powerwall-Global.png" alt="" /><span>Powerwall</span></a>
+        <a class="menu__card" href="https://www.tesla.com/megapack" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Energy-Megapack.png" alt="" /><span>Megapack</span></a>
+      </div>
+      <div class="menu__col">
+        <p class="eyebrow">Charging</p>
+        <a class="menu__card" href="https://www.tesla.com/supercharger" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Charging-Supercharging-APAC.png" alt="" /><span>Supercharging</span></a>
+        <a class="menu__card" href="https://www.tesla.com/home-charging" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Charging-Home-Charging.png" alt="" /><span>Home charging</span></a>
+        <a class="menu__card" href="https://www.tesla.com/charging" target="_blank" rel="noopener"><img src="/img/mega/Mega-Menu-Charging-Charging-Global.png" alt="" /><span>Charging</span></a>
+      </div>
+      <div class="menu__col menu__col--links">
+        <p class="eyebrow">On this page</p>
+        <a href="#film">The film</a>
+        <a href="#aero">Active aero</a>
+        <a href="#details">Detailing</a>
+        <a href="#xray">Structure</a>
+        <a href="#inspect">Inspect in 3D</a>
+        <a href="#studio">Studio</a>
+        <a href="#gravity">Thrust</a>
+        <a href="#world">Out there</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- 1. HERO: scroll-scrubbed animated GLB -->
+    <section class="hero scene3d" id="hero" data-scene="hero">
+      <div class="hero__sticky">
+        <div class="hero__cap hero__cap--intro" data-from="0" data-to="0.12">
+          <p class="eyebrow">Tesla Roadster</p>
+          <h1 class="hero__logo"><img src="/img/logo.png" alt="Roadster" /></h1>
+          <p class="hero__lede">The quickest car in the world. <em>Now in motion.</em></p>
+        </div>
+        <div class="hero__cap hero__cap--left" data-from="0.16" data-to="0.40">
+          <p class="eyebrow"><span class="idx">01</span> Entry</p>
+          <h2 class="h-display">Doors that <em>rise</em><br />to meet you.</h2>
+          <p class="body">Dihedral doors swing up and forward on a single hinge, opening the whole cabin to the sky.</p>
+        </div>
+        <div class="hero__cap hero__cap--right" data-from="0.45" data-to="0.66">
+          <p class="eyebrow"><span class="idx">02</span> Chassis</p>
+          <h2 class="h-display">Steer. Settle.<br /><em>Deploy.</em></h2>
+          <p class="body">Pushrod suspension compresses, the yoke turns and the rear wing rises on polished pistons.</p>
+        </div>
+        <div class="hero__cap hero__cap--left" data-from="0.70" data-to="0.97">
+          <p class="eyebrow"><span class="idx">03</span> Thrust</p>
+          <h2 class="h-display">Then it<br /><em>leaves the ground.</em></h2>
+          <p class="body">Cold gas thrusters fire from the rear diffuser. The ride height becomes a suggestion.</p>
+        </div>
+
+        <div class="hero__scroll mono"><span>Scroll</span><i></i></div>
+      </div>
+    </section>
+
+    <!-- 2. FILM -->
+    <section class="film" id="film">
+      <div class="film__sticky">
+        <div class="film__frame" id="filmFrame">
+          <video class="film__video" id="filmTeaser" src="/video/film-teaser.mp4" poster="/img/poster-film.jpg" muted loop playsinline preload="metadata"></video>
+          <button class="film__play" id="filmPlay" aria-label="Play the film with sound">
+            <span class="film__play-ring"></span>
+            <span class="mono">Play film</span>
+            <span class="mono film__dur">01:26</span>
+          </button>
+        </div>
+        <div class="film__title">
+          <p class="eyebrow">The reveal film</p>
+          <h2 class="h-xl">Born in<br /><em>the dark.</em></h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. AERO -->
+    <section class="aero" id="aero">
+      <div class="aero__stage">
+        <div class="aero__video"><video id="aeroVideo" src="/video/aero.mp4" poster="/img/poster-aero.jpg" muted playsinline loop preload="metadata"></video></div>
+        <div class="aero__shade"></div>
+        <div class="aero__top wrap">
+          <p class="eyebrow"><span class="idx">04</span> Active aerodynamics</p>
+          <h2 class="h-lg">One body.<br /><em>Three shapes.</em></h2>
+        </div>
+        <div class="aero__bar wrap" role="tablist" aria-label="Aero modes">
+          <button class="seg is-active" data-t="0" data-end="7.4" role="tab">
+            <span class="seg__line"><i></i></span>
+            <span class="seg__idx mono">Mode 01</span>
+            <span class="seg__name">Road</span>
+            <span class="seg__desc">Wing stowed. Clean and quiet.</span>
+          </button>
+          <button class="seg" data-t="7.4" data-end="19" role="tab">
+            <span class="seg__line"><i></i></span>
+            <span class="seg__idx mono">Mode 02</span>
+            <span class="seg__name">High downforce</span>
+            <span class="seg__desc">Wing up, endplates out, pinned to the road.</span>
+          </button>
+          <button class="seg" data-t="19" data-end="34" role="tab">
+            <span class="seg__line"><i></i></span>
+            <span class="seg__idx mono">Mode 03</span>
+            <span class="seg__name">Low drag</span>
+            <span class="seg__desc">Surfaces flatten for top speed.</span>
+          </button>
+        </div>
+      </div>
+      <div class="aero__graph wrap">
+        <figure class="reveal-img"><img src="/img/05-graph.webp" alt="Downforce versus speed for multi-mode fan, tire load limit and low drag" loading="lazy" /></figure>
+        <div>
+          <h3 class="h-md">Downforce <em>on demand.</em></h3>
+          <p class="body">A multi-mode fan pulls the car to the ground well past the point where tires alone would let go, then steps aside when you want speed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. DETAILING -->
+    <section class="details" id="details">
+      <div class="wrap">
+        <div class="section-head section-head--center">
+          <p class="eyebrow"><span class="idx">05</span> Detailing</p>
+          <h2 class="h-xl">Every surface <em>considered.</em></h2>
+          <p class="body body--center">Seventeen materials. Thousands of hours of surfacing. A closer look at the parts most cars hide.</p>
+        </div>
+      </div>
+
+      <article class="detail">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r70.webp" alt="Close up of the aero wheel with bronze inserts" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r71-sm.webp" alt="Front wheel arch and fender" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">01</span>
+          <p class="eyebrow">Wheels</p>
+          <h3 class="h-md">Forged aero wheel.</h3>
+          <p class="body">Five blades of diamond-cut aluminium, each backed with warm titanium. Shaped to pull air out of the arch and cool the rotors behind.</p>
+          <ul class="chips"><li>Diamond-cut aluminium</li><li>Warm titanium</li><li>Brake rotor steel</li></ul>
+        </div>
+      </article>
+
+      <article class="detail detail--flip">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r73.webp" alt="Rear light blade and diffuser" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r72-sm.webp" alt="Rear wing raised over the light blade" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">02</span>
+          <p class="eyebrow">Light</p>
+          <h3 class="h-md">A single blade of red.</h3>
+          <p class="body">One continuous optical emitter spans the tail, set under a smoked lens. Below it, the diffuser frames the thruster ports.</p>
+          <ul class="chips"><li>Red optical emitter</li><li>Smoked lamp lens</li><li>Carbon composite</li></ul>
+        </div>
+      </article>
+
+      <article class="detail">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r60.webp" alt="Front suspension with gold springs" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r61-sm.webp" alt="Carbon tub and rotor" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">03</span>
+          <p class="eyebrow">Chassis</p>
+          <h3 class="h-md">Race car bones.</h3>
+          <p class="body">Pushrod front suspension with double wishbones and gold helical springs, mounted to a carbon composite tub you can see from the cabin.</p>
+          <ul class="chips"><li>Pushrod suspension</li><li>Gold helical springs</li><li>Carbon tub</li></ul>
+        </div>
+      </article>
+
+      <article class="detail detail--flip">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r75.webp" alt="Rear deck and sharp folded surfaces" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r74-sm.webp" alt="Folded body panel from above" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">04</span>
+          <p class="eyebrow">Surface</p>
+          <h3 class="h-md">Folded, not moulded.</h3>
+          <p class="body">Pearl silver ceramic paint over hard creases and flat planes. The bronze solar glazing runs from windshield to tail as one tinted canopy.</p>
+          <ul class="chips"><li>Pearl silver ceramic</li><li>Bronze solar glazing</li></ul>
+        </div>
+      </article>
+
+      <article class="detail">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r62.webp" alt="Steering yoke and driver display" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r63-sm.webp" alt="Yoke and centre console" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">05</span>
+          <p class="eyebrow">Cockpit</p>
+          <h3 class="h-md">Hands on the yoke.</h3>
+          <p class="body">An open yoke wrapped in graphite microsuede, a floating driver display and a centre spine that splits the cabin like a keel.</p>
+          <ul class="chips"><li>Graphite microsuede</li><li>Dark display glass</li><li>Satin graphite</li></ul>
+        </div>
+      </article>
+
+      <article class="detail detail--flip">
+        <div class="detail__media">
+          <figure class="detail__main reveal-img"><img src="/img/r64.webp" alt="Seat with embroidered Roadster logo" loading="lazy" /></figure>
+          <figure class="detail__inset reveal-img"><img src="/img/r66-sm.webp" alt="Seats and cabin" loading="lazy" /></figure>
+        </div>
+        <div class="detail__text">
+          <span class="detail__num">06</span>
+          <p class="eyebrow">Seats</p>
+          <h3 class="h-md">Signed in red.</h3>
+          <p class="body">Shell seats in ivory textile and microsuede, each one stitched with the Roadster wordmark and lit by a red ambient line in the door.</p>
+          <ul class="chips"><li>Ivory seat textile</li><li>Cabin red accent</li></ul>
+        </div>
+      </article>
+
+      <div class="cabin">
+        <figure class="cabin__img reveal-img"><img src="/img/03-carousel-slide-4.webp" alt="Full cabin with four seats and yoke" loading="lazy" /></figure>
+        <div class="cabin__cap wrap">
+          <span class="detail__num">07</span>
+          <h3 class="h-md">Room for four. <em>Roof for none.</em></h3>
+          <p class="body">The glass roof lifts out and stows in the trunk. Two plus two, under open sky.</p>
+        </div>
+        <div class="cabin__strip">
+          <img src="/img/r65-sm.webp" alt="Driver seat" loading="lazy" />
+          <img src="/img/r67-sm.webp" alt="Dashboard from passenger side" loading="lazy" />
+          <img src="/img/r68-sm.webp" alt="Cabin with open roof" loading="lazy" />
+          <img src="/img/r69-sm.webp" alt="Rear seats" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. XRAY: rigged GLB -->
+    <section class="xray scene3d" id="xray" data-scene="xray">
+      <div class="xray__sticky">
+        <div class="xray__head">
+          <p class="eyebrow"><span class="idx">06</span> Structure</p>
+          <h2 class="h-lg">See <em>through</em> it.</h2>
+        </div>
+        <ol class="xray__list" id="xrayList">
+          <li data-x="0.00"><span class="mono">X 0.0</span><b>Front optical signature</b><small>White emitter ribbon, smoked lens</small></li>
+          <li data-x="0.20"><span class="mono">X 0.9</span><b>Pushrod front axle</b><small>Wishbones, knuckles, gold springs</small></li>
+          <li data-x="0.45"><span class="mono">X 2.1</span><b>Carbon cabin cell</b><small>Yoke, seats, dihedral door hinges</small></li>
+          <li data-x="0.68"><span class="mono">X 3.2</span><b>Composite pressure vessel</b><small>Stores the gas that feeds the thrusters</small></li>
+          <li data-x="0.86"><span class="mono">X 4.1</span><b>Wing and thrusters</b><small>Articulated supports, diffuser ports</small></li>
+        </ol>
+        <div class="xray__scale mono"><span>Scan</span><b id="xrayPct">0%</b></div>
+      </div>
+    </section>
+
+    <!-- 7. INSPECT: studio GLB with Blender cameras -->
+    <section class="inspect scene3d" id="inspect" data-scene="inspect">
+      <div class="inspect__ui">
+        <div class="inspect__head">
+          <p class="eyebrow"><span class="idx">07</span> Inspect</p>
+          <h2 class="h-lg">Your turn.</h2>
+          <p class="body">Drag to orbit. Pick a view to fly the camera through the shots used in the studio.</p>
+        </div>
+        <div class="inspect__views" id="inspectViews"></div>
+        <div class="inspect__hint mono"><span>Drag</span> to orbit <span>Scroll</span> to continue</div>
+      </div>
+    </section>
+
+    <!-- 8. STUDIO flipbook -->
+    <section class="studio" id="studio">
+      <div class="studio__sticky">
+        <div class="studio__frames" id="studioFrames">
+          <img src="/img/r83.webp" alt="Front view in studio" />
+          <img src="/img/r87.webp" alt="" />
+          <img src="/img/r85.webp" alt="" />
+          <img src="/img/r89.webp" alt="" />
+          <img src="/img/r81.webp" alt="" />
+          <img src="/img/r80.webp" alt="" />
+          <img src="/img/r88.webp" alt="" />
+          <img src="/img/r84.webp" alt="" />
+          <img src="/img/r86.webp" alt="" />
+          <img src="/img/r82.webp" alt="" />
+        </div>
+        <div class="studio__ui">
+          <div>
+            <p class="eyebrow"><span class="idx">08</span> Studio</p>
+            <h2 class="h-lg">One light.<br /><em>Every angle.</em></h2>
+          </div>
+          <div class="studio__count mono"><b id="studioIdx">01</b> / 10</div>
+        </div>
+        <div class="studio__ticks" id="studioTicks"></div>
+      </div>
+    </section>
+
+    <!-- 9. GRAVITY / THRUST -->
+    <section class="gravity" id="gravity">
+      <div class="gravity__video">
+        <video id="loopVideo" src="/video/loop.mp4" poster="/img/poster-loop.jpg" muted playsinline loop preload="metadata"></video>
+        <div class="gravity__shade"></div>
+        <div class="gravity__copy wrap">
+          <p class="eyebrow"><span class="idx">09</span> SpaceX package</p>
+          <h2 class="h-xxl">Defy.</h2>
+          <p class="body">Cold gas thrusters, fed from a composite pressure vessel, push past what tires alone can grip. Up the wall. Over the top. Into the loop.</p>
+          <button class="btn btn--ghost" id="loopSound"><span class="snd"><i></i><i></i><i></i></span><span id="loopSoundLabel">Sound on</span></button>
+        </div>
+      </div>
+      <div class="gravity__pair wrap">
+        <figure class="reveal-img"><img src="/img/06-gravity.webp" alt="Roadster rising on thrusters" loading="lazy" /></figure>
+        <div class="gravity__pair-text">
+          <h3 class="h-md">Thrust you can <em>see.</em></h3>
+          <p class="body">Twin nozzles in the rear diffuser vent at full pressure, lifting the tail off the floor of the studio.</p>
+          <figure class="reveal-img"><img src="/img/r94-sm.webp" alt="Thrusters firing, vapor across the studio floor" loading="lazy" /></figure>
+          <figure class="reveal-img"><img src="/img/r93-sm.webp" alt="Rear of the car lit in red" loading="lazy" /></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. WORLD horizontal -->
+    <section class="world" id="world">
+      <div class="world__sticky">
+        <div class="world__head wrap">
+          <p class="eyebrow"><span class="idx">10</span> Out there</p>
+          <h2 class="h-lg">From salt flat <em>to starlight.</em></h2>
+        </div>
+        <div class="world__track" id="worldTrack">
+          <figure class="wcard wcard--lg"><img src="/img/r90.webp" alt="Driver walking to the car on a salt flat" loading="lazy" /><figcaption><span class="mono">06:40</span> Dry lake bed</figcaption></figure>
+          <figure class="wcard"><img src="/img/r91.webp" alt="Rear view in the desert" loading="lazy" /><figcaption><span class="mono">07:15</span> Mountains behind</figcaption></figure>
+          <figure class="wcard wcard--tall"><img src="/img/r92.webp" alt="Top down view on cracked earth" loading="lazy" /><figcaption><span class="mono">12:00</span> From above</figcaption></figure>
+          <figure class="wcard wcard--lg"><img src="/img/r95.webp" alt="Car at speed on a track at night" loading="lazy" /><figcaption><span class="mono">19:30</span> Track night</figcaption></figure>
+          <figure class="wcard"><img src="/img/r96.webp" alt="Silhouette at dusk with doors open" loading="lazy" /><figcaption><span class="mono">20:10</span> Last light</figcaption></figure>
+          <figure class="wcard wcard--lg"><img src="/img/r97.webp" alt="Car under the milky way with red light" loading="lazy" /><figcaption><span class="mono">23:48</span> Milky Way</figcaption></figure>
+          <figure class="wcard"><img src="/img/r98.webp" alt="Front with doors open under stars" loading="lazy" /><figcaption><span class="mono">00:20</span> Open sky</figcaption></figure>
+          <figure class="wcard wcard--tall"><img src="/img/04-world.webp" alt="Car with doors up under the stars" loading="lazy" /><figcaption><span class="mono">01:05</span> Nobody around</figcaption></figure>
+          <figure class="wcard wcard--lg"><img src="/img/r99.webp" alt="Rear three quarter under stars" loading="lazy" /><figcaption><span class="mono">02:30</span> Home late</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. ORBIT -->
+    <section class="orbit" id="orbit">
+      <div class="orbit__sticky">
+        <div class="orbit__bg"><img src="/img/01-hero-easter-egg.webp" alt="A Roadster in orbit above Earth with a suited driver" loading="lazy" /></div>
+        <div class="orbit__shade"></div>
+        <div class="orbit__copy wrap">
+          <p class="eyebrow orbit__eyebrow">Easter egg</p>
+          <h2 class="h-xl">
+            <span class="line"><span>The last one</span></span>
+            <span class="line"><span>went to <em>orbit.</em></span></span>
+          </h2>
+          <p class="body orbit__body">In 2018 a Roadster left Earth on a Falcon Heavy. This one plans to stay a little closer. Mostly.</p>
+        </div>
+        <div class="orbit__black"></div>
+      </div>
+    </section>
+
+    <!-- 12. RESERVE -->
+    <section class="reserve" id="reserve">
+      <div class="reserve__sticky">
+        <div class="reserve__bg"><img src="/img/01-hero.webp" alt="" loading="lazy" /></div>
+        <div class="reserve__shade"></div>
+        <div class="reserve__copy">
+          <p class="eyebrow reserve__eyebrow">Tesla Roadster</p>
+          <div class="reserve__logo"><img src="/img/logo.png" alt="Roadster" /></div>
+          <p class="body body--center reserve__tag">Be among the first to drive it.</p>
+          <div class="reserve__ctas">
+            <a class="btn btn--solid" href="https://www.tesla.com/roadster" target="_blank" rel="noopener">Reserve now</a>
+            <button class="btn btn--ghost" id="filmPlay2">Watch the film</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <img src="/img/logo-tablet.png" alt="Roadster" class="footer__logo" />
+      <p class="mono footer__note">Fan built concept experience. Not affiliated with Tesla, Inc. Imagery and film belong to their owners.</p>
+      <a href="#top" class="mono footer__top">Back to top</a>
+    </div>
+  </footer>
+
+  <!-- Film modal -->
+  <div class="modal" id="filmModal" aria-hidden="true" role="dialog" aria-label="Reveal film">
+    <button class="modal__close" id="filmClose" aria-label="Close film"><span class="mono">Close</span><i></i></button>
+    <video id="filmFull" src="/video/film.mp4" poster="/img/poster-film.jpg" controls playsinline preload="none"></video>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

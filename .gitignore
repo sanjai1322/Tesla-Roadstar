@@ -1,0 +1,8 @@
+node_modules/
+dist/
+_src/
+.claude/
+*.log
+.DS_Store
+Thumbs.db
+*.blend1
